@@ -1,0 +1,20 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: openclaw-http-route
+spec:
+  parentRefs:
+    - name: istio
+      namespace: kube-system
+      kind: Gateway
+  hostnames:
+    - "openclaw-dev.example.com"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: openclaw-service
+          port: 18789

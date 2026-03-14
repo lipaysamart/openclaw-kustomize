@@ -1,0 +1,42 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base/
+  - http-route.yaml
+  - network-policies.yaml
+
+namespace: openclaw-dev
+
+images:
+  - name: ghcr.io/openclaw/openclaw:main-slim
+    newName: registry.cn-shenzhen.aliyuncs.com/lipaysam/openclaw
+    newTag: main-slim
+
+patches:
+  - target:
+      kind: PersistentVolumeClaim
+      name: openclaw-data
+    path: patches/set_storage.yaml
+  - target:
+      version: v1
+      kind: PersistentVolume
+      name: openclaw-data
+    patch: |-
+      $patch: delete
+      apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: openclaw-data
+  - target:
+      kind: Secret
+      name: openclaw-env-secret
+    patch: |-
+      - op: replace
+        path: /data/BAILIAN_API_KEY
+        // base64 encoded
+        value: c2steHh4Cg==
+      - op: replace
+        path: /data/OPENCLAW_GATEWAY_TOKEN
+        // base64 encoded
+        value: Lqtv/iujS9TuLF2s

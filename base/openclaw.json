@@ -1,0 +1,118 @@
+{
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "trustedProxies": ["10.0.0.1"],
+    "controlUi": {
+      "enabled": true,
+      "basePath": "/openclaw",
+      "allowedOrigins": ["*"]
+    }
+  },
+
+  "browser": {
+    "enabled": true,
+    "defaultProfile": "default",
+    "profiles": {
+      "default": {
+        "cdpUrl": "http://localhost:9222",
+        "color": "#4285F4"
+      }
+    }
+  },
+  "models": {
+    "providers": {
+      "bailian": {
+        "baseUrl": "https://coding.dashscope.aliyuncs.com/v1",
+        "apiKey": "${BAILIAN_API_KEY}",
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "qwen3.5-plus",
+            "name": "qwen3.5-plus",
+            "reasoning": false,
+            "input": ["text", "image"],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 1000000,
+            "maxTokens": 65536,
+            "compat": {
+              "thinkingFormat": "qwen"
+            }
+          },
+          {
+            "id": "MiniMax-M2.5",
+            "name": "MiniMax-M2.5",
+            "reasoning": false,
+            "input": ["text"],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 196608,
+            "maxTokens": 32768
+          }
+        ]
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "workspace": "/home/node/.openclaw/workspace",
+      "model": {
+        "primary": "bailian/qwen3.5-plus"
+      },
+      "models": {
+        "bailian/qwen3.5-plus": {},
+        "bailian/MiniMax-M2.5": {}
+      },
+      "userTimezone": "UTC",
+      "timeoutSeconds": 600,
+      "maxConcurrent": 1
+    },
+    "list": [
+      {
+        "id": "main",
+        "default": true,
+        "identity": {
+          "name": "OpenClaw",
+          "emoji": "🦞"
+        }
+      }
+    ]
+  },
+
+  "session": {
+    "scope": "per-sender",
+    "store": "/home/node/.openclaw/sessions",
+    "reset": {
+      "mode": "idle",
+      "idleMinutes": 60
+    }
+  },
+
+  "logging": {
+    "level": "info",
+    "consoleLevel": "info",
+    "consoleStyle": "compact",
+    "redactSensitive": "tools"
+  },
+
+  "tools": {
+    "profile": "full",
+    "web": {
+      "search": {
+        "enabled": false
+      },
+      "fetch": {
+        "enabled": true
+      }
+    }
+  }
+}
