@@ -78,8 +78,9 @@ kubectl logs -f deployment/openclaw-gateway -n openclaw-dev
 1. **Dual Container Design**: Integrated deployment of gateway main container and chromium headless shell container
 2. **Security Hardening**: ReadOnlyRootFilesystem enabled, runs with non-root privileges, follows least privilege principle
 3. **Skill Initialization**: Pre-install system dependencies (uv, pnpm) and default skills (weather, gog, github) through init containers
-4. **Data Persistence**: Persist user workspace data and configurations through PVC
-5. **Health Checks**: Configure liveness and readiness probes to ensure application stability
+4. **Smart Config Initialization**: Supports CONFIG_MODE environment variable to control initialization strategy - `merge` mode deeply merges default config with existing config (preserving user customizations), `overwrite` mode overwrites with default config
+5. **Data Persistence**: Persist user workspace data and configurations through PVC
+6. **Health Checks**: Configure liveness and readiness probes to ensure application stability
 
 ## Security Features
 
