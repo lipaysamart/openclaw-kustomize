@@ -78,8 +78,9 @@ kubectl logs -f deployment/openclaw-gateway -n openclaw-dev
 1. **双容器设计**：gateway 主容器与 chromium headless shell 容器的集成部署
 2. **安全加固**：启用 ReadOnlyRootFilesystem，非 root 权限运行，最小权限原则
 3. **技能初始化**：通过 init 容器预安装系统依赖（uv、pnpm）及默认技能（weather、gog、github）
-4. **数据持久化**：通过 PVC 持久化用户工作区数据和配置
-5. **健康检查**：配置健康存活探针确保应用稳定性
+4. **智能配置初始化**：支持 CONFIG_MODE 环境变量控制配置初始化策略，`merge` 模式深度合并默认配置与现有配置（保留用户自定义），`overwrite` 模式覆盖写入默认配置
+5. **数据持久化**：通过 PVC 持久化用户工作区数据和配置
+6. **健康检查**：配置健康存活探针确保应用稳定性
 
 ## 安全特性
 
