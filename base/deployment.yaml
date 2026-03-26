@@ -87,6 +87,11 @@ spec:
             fi
             log "Config initialization complete"
         securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
           runAsUser: 1000
           runAsGroup: 1000
         volumeMounts:
@@ -194,6 +199,29 @@ spec:
             mountPath: /tmp
           - name: home
             mountPath: /home/node/.openclaw
+      - name: init-setup
+        image: ghcr.io/openclaw/openclaw:main-slim
+        command:
+          - node
+          - dist/index.js
+          - setup
+        env:
+          - name: HOME
+            value: /home/node/.openclaw
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        volumeMounts:
+          - name: home
+            mountPath: /home/node/.openclaw
+          - name: tmp
+            mountPath: /tmp
       containers:
       - name: gateway
         image: ghcr.io/openclaw/openclaw:main-slim
@@ -279,13 +307,7 @@ spec:
             cpu: 200m
             memory: 512Mi
         securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-          readOnlyRootFilesystem: true
           runAsGroup: 1000
-          runAsNonRoot: true
           runAsUser: 1000
         startupProbe:
           failureThreshold: 12
